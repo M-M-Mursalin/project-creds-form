@@ -1,0 +1,1659 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Codarix — Project Credentials</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ============================================================
+       DESIGN TOKENS — CODARIX 2026
+    ============================================================ */
+    :root {
+      /* Core brand */
+      --brand-cyan:      #00D4FF;
+      --brand-blue:      #0A84FF;
+      --brand-indigo:    #5E5CE6;
+      --brand-glow:      rgba(0, 212, 255, 0.18);
+
+      /* Surfaces */
+      --bg-void:         #04050A;
+      --bg-base:         #070B14;
+      --bg-surface:      #0D1220;
+      --bg-elevated:     #131925;
+      --bg-glass:        rgba(13, 18, 32, 0.72);
+      --bg-input:        rgba(255,255,255,0.035);
+      --bg-input-focus:  rgba(0, 212, 255, 0.06);
+
+      /* Borders */
+      --border-subtle:   rgba(255,255,255,0.06);
+      --border-default:  rgba(255,255,255,0.10);
+      --border-active:   rgba(0, 212, 255, 0.55);
+      --border-error:    rgba(255, 82, 82, 0.6);
+
+      /* Text */
+      --text-primary:    #F0F4FF;
+      --text-secondary:  #8A96B0;
+      --text-muted:      #4A5568;
+      --text-accent:     #00D4FF;
+
+      /* Semantic */
+      --success:         #00E5A0;
+      --success-bg:      rgba(0, 229, 160, 0.08);
+      --error:           #FF5252;
+      --error-bg:        rgba(255, 82, 82, 0.08);
+      --warning:         #FFB74D;
+
+      /* Shadows */
+      --shadow-sm:       0 2px 8px rgba(0,0,0,0.4);
+      --shadow-md:       0 8px 32px rgba(0,0,0,0.5);
+      --shadow-lg:       0 24px 64px rgba(0,0,0,0.6);
+      --shadow-glow:     0 0 40px rgba(0, 212, 255, 0.15);
+      --shadow-card:     0 1px 0 rgba(255,255,255,0.05) inset,
+                         0 -1px 0 rgba(0,0,0,0.3) inset,
+                         0 24px 64px rgba(0,0,0,0.55);
+
+      /* Radii */
+      --radius-sm:  8px;
+      --radius-md:  14px;
+      --radius-lg:  20px;
+      --radius-xl:  28px;
+
+      /* Typography */
+      --font-display: 'Syne', sans-serif;
+      --font-body:    'DM Sans', sans-serif;
+
+      /* Timing */
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+    }
+
+    /* Light mode */
+    [data-theme="light"] {
+      --bg-void:         #EEF2F8;
+      --bg-base:         #F4F7FC;
+      --bg-surface:      #FFFFFF;
+      --bg-elevated:     #FAFBFF;
+      --bg-glass:        rgba(255, 255, 255, 0.82);
+      --bg-input:        rgba(0,0,0,0.025);
+      --bg-input-focus:  rgba(0, 100, 200, 0.05);
+      --border-subtle:   rgba(0,0,0,0.05);
+      --border-default:  rgba(0,0,0,0.10);
+      --border-active:   rgba(0, 100, 200, 0.5);
+      --text-primary:    #0A0E1A;
+      --text-secondary:  #4A5568;
+      --text-muted:      #9AA5B4;
+      --text-accent:     #0064C8;
+      --brand-cyan:      #0064C8;
+      --brand-glow:      rgba(0, 100, 200, 0.10);
+      --shadow-card:     0 1px 0 rgba(255,255,255,0.9) inset,
+                         0 4px 24px rgba(0,0,0,0.08);
+      --shadow-glow:     0 0 40px rgba(0, 100, 200, 0.08);
+    }
+
+    /* ============================================================
+       RESET & BASE
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-base);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* ============================================================
+       BACKGROUND SCENE
+    ============================================================ */
+    .bg-scene {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .bg-mesh {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 10%, rgba(0,130,255,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 80% 20%, rgba(94,92,230,0.10) 0%, transparent 55%),
+        radial-gradient(ellipse 70% 60% at 50% 90%, rgba(0,212,255,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 90% 70%, rgba(94,92,230,0.07) 0%, transparent 50%);
+    }
+
+    [data-theme="light"] .bg-mesh {
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 10%, rgba(0,100,200,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 80% 20%, rgba(94,92,230,0.05) 0%, transparent 55%),
+        radial-gradient(ellipse 70% 60% at 50% 90%, rgba(0,180,255,0.04) 0%, transparent 60%);
+    }
+
+    .bg-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black 30%, transparent 80%);
+    }
+
+    [data-theme="light"] .bg-grid {
+      background-image:
+        linear-gradient(rgba(0,0,0,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,0.035) 1px, transparent 1px);
+    }
+
+    /* Floating orbs */
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.55;
+      animation: float-orb var(--dur, 18s) ease-in-out infinite alternate;
+    }
+    .orb-1 { width: 500px; height: 500px; background: rgba(0,130,255,0.15); top: -15%; left: -10%; --dur: 20s; }
+    .orb-2 { width: 400px; height: 400px; background: rgba(94,92,230,0.12); top: 40%; right: -8%; --dur: 25s; animation-delay: -8s; }
+    .orb-3 { width: 300px; height: 300px; background: rgba(0,212,255,0.10); bottom: -10%; left: 30%; --dur: 22s; animation-delay: -4s; }
+
+    @keyframes float-orb {
+      0%   { transform: translate(0, 0) scale(1); }
+      50%  { transform: translate(30px, -20px) scale(1.05); }
+      100% { transform: translate(-20px, 30px) scale(0.95); }
+    }
+
+    /* Scan line */
+    .scan-line {
+      position: absolute;
+      left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(0,212,255,0.3), transparent);
+      animation: scan 8s linear infinite;
+      opacity: 0.4;
+    }
+    @keyframes scan {
+      0%   { top: -2%; }
+      100% { top: 102%; }
+    }
+
+    /* ============================================================
+       LAYOUT
+    ============================================================ */
+    .page-wrapper {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px 60px;
+    }
+
+    /* ============================================================
+       HEADER / LOGO ZONE
+    ============================================================ */
+    .header {
+      text-align: center;
+      margin-bottom: 36px;
+      animation: entrance-up 0.8s var(--ease-out) both;
+    }
+
+    .logo-lockup {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    /* Redesigned Codarix logo icon */
+    .logo-icon {
+      width: 52px;
+      height: 52px;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .logo-icon svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 0 12px rgba(0,212,255,0.5));
+    }
+
+    .logo-wordmark {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #FFFFFF 0%, var(--brand-cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    [data-theme="light"] .logo-wordmark {
+      background: linear-gradient(135deg, #0A0E1A 0%, var(--brand-cyan) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+
+    .header-tagline {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .header-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(0,212,255,0.08);
+      border: 1px solid rgba(0,212,255,0.2);
+      border-radius: 100px;
+      padding: 5px 14px;
+      font-size: 11.5px;
+      font-weight: 500;
+      color: var(--text-accent);
+      letter-spacing: 0.04em;
+      margin-bottom: 16px;
+    }
+
+    .header-pill::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 8px var(--success);
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(0.85); }
+    }
+
+    .header h1 {
+      font-family: var(--font-display);
+      font-size: clamp(24px, 4vw, 32px);
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--text-primary);
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .header p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      font-weight: 300;
+    }
+
+    /* ============================================================
+       CARD
+    ============================================================ */
+    .card {
+      width: 100%;
+      max-width: 520px;
+      background: var(--bg-glass);
+      backdrop-filter: blur(24px) saturate(1.4);
+      -webkit-backdrop-filter: blur(24px) saturate(1.4);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-card), var(--shadow-glow);
+      padding: 40px;
+      position: relative;
+      overflow: hidden;
+      animation: entrance-up 0.9s var(--ease-out) 0.1s both;
+    }
+
+    /* Card inner glow top */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 10%; right: 10%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(0,212,255,0.4), transparent);
+    }
+
+    /* Card shimmer sweep */
+    .card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, transparent 50%);
+      pointer-events: none;
+      border-radius: inherit;
+    }
+
+    /* ============================================================
+       FORM
+    ============================================================ */
+    .form {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      animation: entrance-up 0.7s var(--ease-out) both;
+    }
+
+    .field:nth-child(1) { animation-delay: 0.15s; }
+    .field:nth-child(2) { animation-delay: 0.20s; }
+    .field:nth-child(3) { animation-delay: 0.25s; }
+    .field:nth-child(4) { animation-delay: 0.30s; }
+    .field:nth-child(5) { animation-delay: 0.35s; }
+
+    .label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .label-required {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--brand-cyan);
+      box-shadow: 0 0 6px var(--brand-cyan);
+      flex-shrink: 0;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      width: 16px;
+      height: 16px;
+      transition: color 0.2s;
+      pointer-events: none;
+    }
+
+    .input-action {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-muted);
+      padding: 4px;
+      border-radius: 6px;
+      transition: color 0.2s, background 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .input-action:hover {
+      color: var(--text-primary);
+      background: rgba(255,255,255,0.06);
+    }
+
+    input[type="text"],
+    input[type="url"],
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      height: 48px;
+      padding: 0 44px 0 44px;
+      background: var(--bg-input);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 400;
+      outline: none;
+      transition:
+        border-color 0.25s var(--ease-out),
+        background 0.25s var(--ease-out),
+        box-shadow 0.25s var(--ease-out),
+        transform 0.15s var(--ease-spring);
+      -webkit-appearance: none;
+    }
+
+    /* Password field — wider left icon but also copy btn */
+    input.no-right-icon { padding-right: 14px; }
+    input.has-right-icon { padding-right: 44px; }
+
+    input::placeholder { color: var(--text-muted); font-weight: 300; }
+
+    input:hover {
+      border-color: var(--border-default);
+      background: rgba(255,255,255,0.05);
+    }
+
+    input:focus {
+      border-color: var(--border-active);
+      background: var(--bg-input-focus);
+      box-shadow: 0 0 0 4px rgba(0,212,255,0.08), 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    [data-theme="light"] input:focus {
+      box-shadow: 0 0 0 4px rgba(0,100,200,0.08), 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    input:focus + .input-icon,
+    .input-wrap:focus-within .input-icon {
+      color: var(--text-accent);
+    }
+
+    /* Error / valid states */
+    input.is-error {
+      border-color: var(--border-error) !important;
+      background: var(--error-bg) !important;
+    }
+
+    input.is-valid {
+      border-color: rgba(0, 229, 160, 0.4) !important;
+    }
+
+    .field-message {
+      font-size: 11.5px;
+      height: 0;
+      overflow: hidden;
+      transition: height 0.25s var(--ease-out), opacity 0.25s;
+      opacity: 0;
+    }
+
+    .field-message.visible {
+      height: 18px;
+      opacity: 1;
+    }
+
+    .field-message.error { color: var(--error); }
+    .field-message.success { color: var(--success); }
+
+    /* Copy toast */
+    .copy-toast {
+      position: absolute;
+      right: 44px;
+      top: 50%;
+      transform: translateY(-50%) translateX(4px);
+      background: var(--success);
+      color: #000;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      padding: 3px 8px;
+      border-radius: 100px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s, transform 0.2s;
+      white-space: nowrap;
+    }
+
+    .copy-toast.show {
+      opacity: 1;
+      transform: translateY(-50%) translateX(0);
+    }
+
+    /* ============================================================
+       DIVIDER
+    ============================================================ */
+    .divider {
+      height: 1px;
+      background: var(--border-subtle);
+      margin: 4px 0;
+    }
+
+    /* ============================================================
+       SUBMIT BUTTON
+    ============================================================ */
+    .btn-submit {
+      position: relative;
+      width: 100%;
+      height: 52px;
+      background: linear-gradient(135deg, #0A84FF 0%, #00D4FF 100%);
+      border: none;
+      border-radius: var(--radius-md);
+      color: #fff;
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      overflow: hidden;
+      transition: transform 0.2s var(--ease-spring), box-shadow 0.2s, filter 0.2s;
+      box-shadow: 0 4px 20px rgba(0,130,255,0.35), 0 1px 0 rgba(255,255,255,0.15) inset;
+      margin-top: 6px;
+    }
+
+    .btn-submit::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+    }
+
+    /* Shimmer sweep */
+    .btn-submit::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .btn-submit:hover::after { left: 140%; }
+
+    .btn-submit:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(0,130,255,0.5), 0 1px 0 rgba(255,255,255,0.15) inset;
+    }
+
+    .btn-submit:active:not(:disabled) {
+      transform: translateY(0) scale(0.98);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      filter: grayscale(0.3);
+    }
+
+    .btn-text {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: opacity 0.2s;
+    }
+
+    /* Loading spinner inside button */
+    .btn-spinner {
+      display: none;
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-spinner.active { display: flex; }
+    .btn-spinner.active ~ .btn-text { opacity: 0; }
+
+    .spinner-ring {
+      width: 22px; height: 22px;
+      border: 2px solid rgba(255,255,255,0.25);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.65s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ============================================================
+       THEME TOGGLE
+    ============================================================ */
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+      width: 40px; height: 40px;
+      background: var(--bg-glass);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-default);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-secondary);
+      transition: color 0.2s, border-color 0.2s, transform 0.2s var(--ease-spring);
+    }
+
+    .theme-toggle:hover {
+      color: var(--text-primary);
+      border-color: var(--border-active);
+      transform: scale(1.08);
+    }
+
+    /* ============================================================
+       SUCCESS OVERLAY
+    ============================================================ */
+    .success-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(4, 5, 10, 0.85);
+      backdrop-filter: blur(16px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s;
+    }
+
+    .success-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .success-modal {
+      background: var(--bg-glass);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(0,229,160,0.25);
+      border-radius: var(--radius-xl);
+      padding: 48px 40px 40px;
+      text-align: center;
+      max-width: 380px;
+      width: calc(100% - 40px);
+      transform: scale(0.85) translateY(20px);
+      transition: transform 0.5s var(--ease-spring);
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.05) inset,
+                  0 24px 80px rgba(0,0,0,0.6),
+                  0 0 60px rgba(0,229,160,0.12);
+    }
+
+    .success-overlay.active .success-modal {
+      transform: scale(1) translateY(0);
+    }
+
+    .check-circle {
+      width: 72px; height: 72px;
+      margin: 0 auto 24px;
+      position: relative;
+    }
+
+    .check-circle svg { width: 100%; height: 100%; }
+
+    .check-bg {
+      fill: none;
+      stroke: rgba(0,229,160,0.15);
+      stroke-width: 2;
+    }
+
+    .check-ring {
+      fill: none;
+      stroke: var(--success);
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-dasharray: 200;
+      stroke-dashoffset: 200;
+      transform-origin: center;
+      transform: rotate(-90deg);
+      filter: drop-shadow(0 0 8px var(--success));
+    }
+
+    .check-mark {
+      fill: none;
+      stroke: var(--success);
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 40;
+      stroke-dashoffset: 40;
+      filter: drop-shadow(0 0 6px var(--success));
+    }
+
+    .success-overlay.active .check-ring {
+      animation: draw-ring 0.7s var(--ease-out) 0.2s forwards;
+    }
+
+    .success-overlay.active .check-mark {
+      animation: draw-check 0.4s var(--ease-out) 0.8s forwards;
+    }
+
+    @keyframes draw-ring {
+      to { stroke-dashoffset: 0; }
+    }
+
+    @keyframes draw-check {
+      to { stroke-dashoffset: 0; }
+    }
+
+    .success-modal h2 {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+    }
+
+    .success-modal p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    .success-meta {
+      margin-top: 20px;
+      padding: 14px 16px;
+      background: var(--success-bg);
+      border: 1px solid rgba(0,229,160,0.15);
+      border-radius: var(--radius-md);
+      font-size: 12px;
+      color: var(--success);
+      font-weight: 500;
+    }
+
+    .btn-dismiss {
+      margin-top: 24px;
+      width: 100%;
+      height: 44px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-md);
+      color: var(--text-secondary);
+      font-family: var(--font-body);
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, transform 0.2s var(--ease-spring);
+    }
+
+    .btn-dismiss:hover {
+      background: rgba(255,255,255,0.10);
+      color: var(--text-primary);
+      transform: translateY(-1px);
+    }
+
+    /* ============================================================
+       CONFETTI CANVAS
+    ============================================================ */
+    #confetti-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 199;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    #confetti-canvas.active { opacity: 1; }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    .footer {
+      margin-top: 32px;
+      text-align: center;
+      font-size: 11.5px;
+      color: var(--text-muted);
+      letter-spacing: 0.03em;
+      animation: entrance-up 0.8s var(--ease-out) 0.4s both;
+    }
+
+    .footer a {
+      color: var(--text-accent);
+      text-decoration: none;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+
+    .footer a:hover { opacity: 1; }
+
+    /* ============================================================
+       ENTRANCE ANIMATION
+    ============================================================ */
+    @keyframes entrance-up {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 560px) {
+      .card { padding: 28px 22px; }
+      .header { margin-bottom: 28px; }
+      .logo-wordmark { font-size: 24px; }
+    }
+
+    /* ============================================================
+       PROGRESS BAR TOP
+    ============================================================ */
+    .progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      height: 2.5px;
+      background: linear-gradient(90deg, #0A84FF, #00D4FF);
+      border-radius: 0 2px 2px 0;
+      z-index: 300;
+      width: 0;
+      opacity: 0;
+      transition: width 0.3s var(--ease-out), opacity 0.2s;
+      box-shadow: 0 0 12px rgba(0,212,255,0.6);
+    }
+
+    /* ============================================================
+       SKELETON (loading state placeholder)
+    ============================================================ */
+    @keyframes skeleton-shimmer {
+      0%   { background-position: -400px 0; }
+      100% { background-position: 400px 0; }
+    }
+
+    /* ============================================================
+       FLOATING BADGE
+    ============================================================ */
+    .security-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,229,160,0.06);
+      border: 1px solid rgba(0,229,160,0.15);
+      border-radius: 100px;
+      padding: 6px 14px 6px 8px;
+      margin-top: 16px;
+      font-size: 11.5px;
+      color: var(--success);
+      font-weight: 500;
+      width: fit-content;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .security-badge svg { flex-shrink: 0; }
+
+    /* ============================================================
+       SCROLL INDICATOR
+    ============================================================ */
+    .scroll-hint {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      animation: entrance-up 1s var(--ease-out) 1s both;
+      opacity: 0.6;
+    }
+
+    .scroll-hint::after {
+      content: '';
+      width: 1px; height: 24px;
+      background: linear-gradient(to bottom, var(--text-muted), transparent);
+      animation: scroll-line 1.5s ease-in-out infinite;
+    }
+
+    @keyframes scroll-line {
+      0%, 100% { opacity: 0.4; transform: scaleY(1); transform-origin: top; }
+      50% { opacity: 1; transform: scaleY(1.4); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Background Scene -->
+<div class="bg-scene" aria-hidden="true">
+  <div class="bg-mesh"></div>
+  <div class="bg-grid"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="scan-line"></div>
+</div>
+
+<!-- Progress Bar -->
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- Theme Toggle -->
+<button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle theme">
+  <svg id="iconMoon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+  </svg>
+  <svg id="iconSun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+    <circle cx="12" cy="12" r="5"/>
+    <line x1="12" y1="1" x2="12" y2="3"/>
+    <line x1="12" y1="21" x2="12" y2="23"/>
+    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+    <line x1="1" y1="12" x2="3" y2="12"/>
+    <line x1="21" y1="12" x2="23" y2="12"/>
+    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+  </svg>
+</button>
+
+<!-- Confetti Canvas -->
+<canvas id="confetti-canvas"></canvas>
+
+<!-- Main Content -->
+<div class="page-wrapper">
+
+  <!-- Header -->
+  <header class="header">
+    <div class="logo-lockup">
+      <!-- Redesigned Codarix Logo Icon -->
+      <div class="logo-icon">
+        <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="logoGrad" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#0A84FF"/>
+              <stop offset="100%" stop-color="#00D4FF"/>
+            </linearGradient>
+            <linearGradient id="logoGrad2" x1="52" y1="0" x2="0" y2="52" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#00D4FF" stop-opacity="0.6"/>
+              <stop offset="100%" stop-color="#0A84FF" stop-opacity="0.2"/>
+            </linearGradient>
+          </defs>
+          <!-- Hexagonal base -->
+          <path d="M26 4 L44 14.5 L44 37.5 L26 48 L8 37.5 L8 14.5 Z"
+                fill="url(#logoGrad2)" stroke="url(#logoGrad)" stroke-width="1.5" stroke-linejoin="round"/>
+          <!-- Inner C shape — bold, modern -->
+          <path d="M32 18 A10 10 0 1 0 32 34 L32 30 A6 6 0 1 1 32 22 Z"
+                fill="url(#logoGrad)" stroke="none"/>
+          <!-- Accent dot -->
+          <circle cx="32" cy="26" r="2.5" fill="#00D4FF" opacity="0.9"/>
+        </svg>
+      </div>
+      <span class="logo-wordmark">CODARIX</span>
+    </div>
+
+    <div class="header-pill">Internal Dashboard · Secure Portal</div>
+
+    <h1>Project Credentials</h1>
+    <p>Submit and manage your project information securely.</p>
+  </header>
+
+  <!-- Form Card -->
+  <div class="card" role="main">
+    <form class="form" id="credForm" novalidate autocomplete="off">
+
+      <!-- Project Name -->
+      <div class="field" id="field-projectName">
+        <label class="label" for="projectName">
+          <span class="label-required"></span>
+          Project Name
+        </label>
+        <div class="input-wrap">
+          <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+          </svg>
+          <input
+            type="text"
+            id="projectName"
+            name="projectName"
+            class="has-right-icon"
+            placeholder="e.g. Acme Corp Redesign"
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <button type="button" class="input-action" data-copy="projectName" title="Copy">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+          </button>
+          <div class="copy-toast" id="toast-projectName">Copied!</div>
+        </div>
+        <div class="field-message" id="msg-projectName"></div>
+      </div>
+
+      <!-- Project URL -->
+      <div class="field" id="field-projectUrl">
+        <label class="label" for="projectUrl">
+          <span class="label-required"></span>
+          Project URL
+        </label>
+        <div class="input-wrap">
+          <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+          </svg>
+          <input
+            type="url"
+            id="projectUrl"
+            name="projectUrl"
+            class="has-right-icon"
+            placeholder="https://example.com"
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <button type="button" class="input-action" data-copy="projectUrl" title="Copy">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+          </button>
+          <div class="copy-toast" id="toast-projectUrl">Copied!</div>
+        </div>
+        <div class="field-message" id="msg-projectUrl"></div>
+      </div>
+
+      <!-- Email / Username -->
+      <div class="field" id="field-userEmail">
+        <label class="label" for="userEmail">
+          <span class="label-required"></span>
+          User Email / Username
+        </label>
+        <div class="input-wrap">
+          <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+          </svg>
+          <input
+            type="email"
+            id="userEmail"
+            name="userEmail"
+            class="has-right-icon"
+            placeholder="admin@example.com"
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <button type="button" class="input-action" data-copy="userEmail" title="Copy">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+          </button>
+          <div class="copy-toast" id="toast-userEmail">Copied!</div>
+        </div>
+        <div class="field-message" id="msg-userEmail"></div>
+      </div>
+
+      <!-- WordPress Password -->
+      <div class="field" id="field-wpPassword">
+        <label class="label" for="wpPassword">
+          <span class="label-required"></span>
+          WordPress Password
+        </label>
+        <div class="input-wrap">
+          <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+          <input
+            type="password"
+            id="wpPassword"
+            name="wpPassword"
+            class="has-right-icon"
+            placeholder="Enter WordPress password"
+            autocomplete="new-password"
+            spellcheck="false"
+          />
+          <button type="button" class="input-action" id="togglePassword" title="Show/hide password">
+            <svg id="eyeIcon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+            </svg>
+            <svg id="eyeOffIcon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+              <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Password strength bar -->
+        <div id="pwStrengthWrap" style="display:none; margin-top:6px;">
+          <div style="display:flex; gap:4px; margin-bottom:4px;">
+            <div class="pw-bar" id="pwBar1" style="height:3px; flex:1; border-radius:2px; background:var(--border-subtle); transition:background 0.3s;"></div>
+            <div class="pw-bar" id="pwBar2" style="height:3px; flex:1; border-radius:2px; background:var(--border-subtle); transition:background 0.3s;"></div>
+            <div class="pw-bar" id="pwBar3" style="height:3px; flex:1; border-radius:2px; background:var(--border-subtle); transition:background 0.3s;"></div>
+            <div class="pw-bar" id="pwBar4" style="height:3px; flex:1; border-radius:2px; background:var(--border-subtle); transition:background 0.3s;"></div>
+          </div>
+          <div id="pwStrengthLabel" style="font-size:11px; color:var(--text-muted);"></div>
+        </div>
+
+        <div class="field-message" id="msg-wpPassword"></div>
+      </div>
+
+      <!-- Invoice Link -->
+      <div class="field" id="field-invoiceLink">
+        <label class="label" for="invoiceLink">
+          <span class="label-required"></span>
+          Invoice Link
+        </label>
+        <div class="input-wrap">
+          <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/>
+          </svg>
+          <input
+            type="url"
+            id="invoiceLink"
+            name="invoiceLink"
+            class="has-right-icon"
+            placeholder="https://drive.google.com/..."
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <button type="button" class="input-action" data-copy="invoiceLink" title="Copy">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+          </button>
+          <div class="copy-toast" id="toast-invoiceLink">Copied!</div>
+        </div>
+        <div class="field-message" id="msg-invoiceLink"></div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="btn-submit" id="btnSubmit">
+        <div class="btn-spinner" id="btnSpinner">
+          <div class="spinner-ring"></div>
+        </div>
+        <div class="btn-text" id="btnText">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9"/>
+          </svg>
+          Submit Project Information
+        </div>
+      </button>
+
+    </form>
+
+    <!-- Security badge inside card -->
+    <div class="security-badge" style="margin-top:20px;">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      </svg>
+      Encrypted · Internal Use Only
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <span>© 2026 Codarix. All rights reserved.</span>
+  </footer>
+
+</div>
+
+<!-- Success Overlay -->
+<div class="success-overlay" id="successOverlay" role="dialog" aria-modal="true" aria-labelledby="successTitle">
+  <div class="success-modal">
+    <div class="check-circle">
+      <svg viewBox="0 0 72 72" fill="none">
+        <circle class="check-bg" cx="36" cy="36" r="33"/>
+        <circle class="check-ring" cx="36" cy="36" r="33" stroke-dasharray="207" stroke-dashoffset="207"/>
+        <path class="check-mark" d="M22 37 L31 46 L50 27" stroke-dasharray="38" stroke-dashoffset="38"/>
+      </svg>
+    </div>
+    <h2 id="successTitle">Project Information Updated</h2>
+    <p>Your credentials have been securely saved to the project database.</p>
+    <div class="success-meta" id="successMeta">
+      ✓ Successfully synced to Google Sheets
+    </div>
+    <button class="btn-dismiss" id="btnDismiss">Close & Reset Form</button>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   CONFIGURATION — UPDATE THESE
+============================================================ */
+const APPS_SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE';
+/*
+  HOW TO SET UP GOOGLE SHEETS INTEGRATION:
+  1. Create a new Google Sheet
+  2. Go to Extensions → Apps Script
+  3. Paste the doPost function (see below) and deploy as Web App
+  4. Replace the URL above with your deployment URL
+
+  --- APPS SCRIPT CODE (paste in Apps Script editor) ---
+  function doPost(e) {
+    try {
+      var data = JSON.parse(e.postData.contents);
+      var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+      if (sheet.getLastRow() === 0) {
+        sheet.appendRow(['Timestamp','Project Name','Project URL','User Email','WP Password','Invoice Link']);
+      }
+      sheet.appendRow([
+        new Date().toLocaleString(),
+        data.projectName,
+        data.projectUrl,
+        data.userEmail,
+        data.wpPassword,
+        data.invoiceLink
+      ]);
+      return ContentService.createTextOutput(JSON.stringify({status:'success'}))
+        .setMimeType(ContentService.MimeType.JSON);
+    } catch(err) {
+      return ContentService.createTextOutput(JSON.stringify({status:'error', message:err.toString()}))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+  }
+  --- END APPS SCRIPT CODE ---
+*/
+
+/* ============================================================
+   THEME TOGGLE
+============================================================ */
+const html = document.documentElement;
+const themeToggle = document.getElementById('themeToggle');
+const iconMoon = document.getElementById('iconMoon');
+const iconSun  = document.getElementById('iconSun');
+
+let currentTheme = localStorage.getItem('codarix-theme') || 'dark';
+applyTheme(currentTheme);
+
+function applyTheme(t) {
+  html.setAttribute('data-theme', t);
+  iconMoon.style.display = t === 'dark' ? 'block' : 'none';
+  iconSun.style.display  = t === 'light' ? 'block' : 'none';
+  currentTheme = t;
+  localStorage.setItem('codarix-theme', t);
+}
+
+themeToggle.addEventListener('click', () => {
+  applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
+});
+
+/* ============================================================
+   PASSWORD VISIBILITY TOGGLE
+============================================================ */
+const pwInput = document.getElementById('wpPassword');
+const toggleBtn = document.getElementById('togglePassword');
+const eyeIcon = document.getElementById('eyeIcon');
+const eyeOffIcon = document.getElementById('eyeOffIcon');
+
+toggleBtn.addEventListener('click', () => {
+  const isHidden = pwInput.type === 'password';
+  pwInput.type = isHidden ? 'text' : 'password';
+  eyeIcon.style.display    = isHidden ? 'none' : 'block';
+  eyeOffIcon.style.display = isHidden ? 'block' : 'none';
+  pwInput.focus();
+});
+
+/* ============================================================
+   PASSWORD STRENGTH
+============================================================ */
+const pwStrengthWrap = document.getElementById('pwStrengthWrap');
+const bars = [
+  document.getElementById('pwBar1'),
+  document.getElementById('pwBar2'),
+  document.getElementById('pwBar3'),
+  document.getElementById('pwBar4'),
+];
+const pwLabel = document.getElementById('pwStrengthLabel');
+
+const STRENGTH_COLORS = ['#FF5252','#FFB74D','#00D4FF','#00E5A0'];
+const STRENGTH_LABELS = ['Weak','Fair','Good','Strong'];
+
+function checkPasswordStrength(pw) {
+  let score = 0;
+  if (pw.length >= 8)  score++;
+  if (/[A-Z]/.test(pw)) score++;
+  if (/[0-9]/.test(pw)) score++;
+  if (/[^A-Za-z0-9]/.test(pw)) score++;
+  return score;
+}
+
+pwInput.addEventListener('input', () => {
+  const val = pwInput.value;
+  if (!val) {
+    pwStrengthWrap.style.display = 'none';
+    return;
+  }
+  pwStrengthWrap.style.display = 'block';
+  const score = checkPasswordStrength(val);
+  bars.forEach((b, i) => {
+    b.style.background = i < score ? STRENGTH_COLORS[score - 1] : 'var(--border-subtle)';
+    b.style.boxShadow  = i < score ? `0 0 6px ${STRENGTH_COLORS[score-1]}60` : 'none';
+  });
+  pwLabel.textContent = STRENGTH_LABELS[score - 1] || '';
+  pwLabel.style.color = STRENGTH_COLORS[score - 1] || 'var(--text-muted)';
+});
+
+/* ============================================================
+   COPY-TO-CLIPBOARD
+============================================================ */
+document.querySelectorAll('[data-copy]').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const id = btn.getAttribute('data-copy');
+    const input = document.getElementById(id);
+    const toast = document.getElementById('toast-' + id);
+    if (!input || !input.value.trim()) return;
+    try {
+      await navigator.clipboard.writeText(input.value.trim());
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 1800);
+    } catch (e) {
+      // fallback
+      input.select();
+      document.execCommand('copy');
+    }
+  });
+});
+
+/* ============================================================
+   VALIDATION
+============================================================ */
+function showMsg(fieldId, text, type) {
+  const el = document.getElementById('msg-' + fieldId);
+  if (!el) return;
+  el.textContent = text;
+  el.className = 'field-message ' + (text ? 'visible ' + type : '');
+}
+
+function setInputState(input, state) {
+  input.classList.remove('is-error', 'is-valid');
+  if (state) input.classList.add(state);
+}
+
+function validateField(id) {
+  const input = document.getElementById(id);
+  const val = input.value.trim();
+  let valid = true;
+
+  switch (id) {
+    case 'projectName':
+      if (!val) { showMsg(id, 'Project name is required', 'error'); valid = false; }
+      else if (val.length < 2) { showMsg(id, 'Name too short', 'error'); valid = false; }
+      else showMsg(id, '', '');
+      break;
+    case 'projectUrl':
+      if (!val) { showMsg(id, 'Project URL is required', 'error'); valid = false; }
+      else if (!/^https?:\/\/.+\..+/.test(val)) { showMsg(id, 'Enter a valid URL (https://…)', 'error'); valid = false; }
+      else showMsg(id, '', '');
+      break;
+    case 'userEmail':
+      if (!val) { showMsg(id, 'Email or username is required', 'error'); valid = false; }
+      else showMsg(id, '', '');
+      break;
+    case 'wpPassword':
+      if (!val) { showMsg(id, 'Password is required', 'error'); valid = false; }
+      else showMsg(id, '', '');
+      break;
+    case 'invoiceLink':
+      if (!val) { showMsg(id, 'Invoice link is required', 'error'); valid = false; }
+      else if (!/^https?:\/\/.+/.test(val)) { showMsg(id, 'Enter a valid URL', 'error'); valid = false; }
+      else showMsg(id, '', '');
+      break;
+  }
+
+  setInputState(input, valid ? 'is-valid' : 'is-error');
+  return valid;
+}
+
+// Real-time validation on blur
+['projectName','projectUrl','userEmail','wpPassword','invoiceLink'].forEach(id => {
+  const el = document.getElementById(id);
+  el.addEventListener('blur', () => { if (el.value) validateField(id); });
+  el.addEventListener('input', () => {
+    if (el.classList.contains('is-error')) validateField(id);
+  });
+});
+
+/* ============================================================
+   PROGRESS BAR
+============================================================ */
+const progressBar = document.getElementById('progressBar');
+
+function startProgress() {
+  progressBar.style.opacity = '1';
+  progressBar.style.width = '0%';
+  requestAnimationFrame(() => {
+    progressBar.style.transition = 'width 1.8s var(--ease-out)';
+    progressBar.style.width = '80%';
+  });
+}
+
+function finishProgress() {
+  progressBar.style.transition = 'width 0.3s ease';
+  progressBar.style.width = '100%';
+  setTimeout(() => {
+    progressBar.style.opacity = '0';
+    progressBar.style.width = '0%';
+    progressBar.style.transition = 'none';
+  }, 400);
+}
+
+/* ============================================================
+   FORM SUBMISSION
+============================================================ */
+const form = document.getElementById('credForm');
+const btnSubmit = document.getElementById('btnSubmit');
+const btnSpinner = document.getElementById('btnSpinner');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const fields = ['projectName','projectUrl','userEmail','wpPassword','invoiceLink'];
+  const allValid = fields.map(id => validateField(id)).every(Boolean);
+
+  if (!allValid) {
+    // Shake the card
+    const card = document.querySelector('.card');
+    card.style.animation = 'none';
+    card.style.transform = 'translateX(-6px)';
+    setTimeout(() => { card.style.transform = 'translateX(6px)'; }, 80);
+    setTimeout(() => { card.style.transform = 'translateX(-4px)'; }, 160);
+    setTimeout(() => { card.style.transform = 'translateX(0)'; }, 240);
+    return;
+  }
+
+  // Disable & show spinner
+  btnSubmit.disabled = true;
+  btnSpinner.classList.add('active');
+  startProgress();
+
+  const payload = {
+    projectName:  document.getElementById('projectName').value.trim(),
+    projectUrl:   document.getElementById('projectUrl').value.trim(),
+    userEmail:    document.getElementById('userEmail').value.trim(),
+    wpPassword:   document.getElementById('wpPassword').value,
+    invoiceLink:  document.getElementById('invoiceLink').value.trim(),
+    timestamp:    new Date().toISOString(),
+  };
+
+  let success = false;
+
+  try {
+    if (APPS_SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE') {
+      // Demo mode — simulate a network call
+      await new Promise(r => setTimeout(r, 1800));
+      success = true;
+    } else {
+      const res = await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      success = data.status === 'success';
+    }
+  } catch (err) {
+    console.error('Submission error:', err);
+    success = false;
+  }
+
+  finishProgress();
+  btnSubmit.disabled = false;
+  btnSpinner.classList.remove('active');
+
+  if (success) {
+    showSuccessState(payload.projectName);
+  } else {
+    // Show inline error
+    showMsg('projectName', '', '');
+    const errMsg = document.createElement('div');
+    errMsg.style.cssText = `
+      padding: 12px 16px;
+      background: var(--error-bg);
+      border: 1px solid var(--border-error);
+      border-radius: var(--radius-md);
+      color: var(--error);
+      font-size: 13px;
+      text-align: center;
+      margin-top: 4px;
+    `;
+    errMsg.textContent = '⚠ Submission failed. Please check your connection and try again.';
+    form.appendChild(errMsg);
+    setTimeout(() => errMsg.remove(), 5000);
+  }
+});
+
+/* ============================================================
+   SUCCESS STATE
+============================================================ */
+function showSuccessState(projectName) {
+  const overlay = document.getElementById('successOverlay');
+  const meta = document.getElementById('successMeta');
+  meta.textContent = `✓ "${projectName}" saved successfully`;
+  overlay.classList.add('active');
+  launchConfetti();
+}
+
+document.getElementById('btnDismiss').addEventListener('click', () => {
+  const overlay = document.getElementById('successOverlay');
+  overlay.classList.remove('active');
+  stopConfetti();
+  form.reset();
+  document.querySelectorAll('input').forEach(i => {
+    i.classList.remove('is-valid', 'is-error');
+  });
+  document.querySelectorAll('.field-message').forEach(m => {
+    m.className = 'field-message';
+  });
+  document.getElementById('pwStrengthWrap').style.display = 'none';
+});
+
+/* ============================================================
+   CONFETTI ENGINE
+============================================================ */
+const canvas = document.getElementById('confetti-canvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+let animId = null;
+let confettiRunning = false;
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+const COLORS = ['#00D4FF','#0A84FF','#5E5CE6','#00E5A0','#FFFFFF','#FFB74D'];
+
+function createParticle() {
+  return {
+    x: Math.random() * canvas.width,
+    y: -10,
+    vx: (Math.random() - 0.5) * 3,
+    vy: Math.random() * 4 + 2,
+    size: Math.random() * 7 + 3,
+    color: COLORS[Math.floor(Math.random() * COLORS.length)],
+    rotation: Math.random() * 360,
+    rotSpeed: (Math.random() - 0.5) * 6,
+    shape: Math.random() > 0.5 ? 'rect' : 'circle',
+    opacity: 1,
+  };
+}
+
+function drawParticle(p) {
+  ctx.save();
+  ctx.globalAlpha = p.opacity;
+  ctx.fillStyle = p.color;
+  ctx.translate(p.x, p.y);
+  ctx.rotate((p.rotation * Math.PI) / 180);
+  if (p.shape === 'rect') {
+    ctx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
+  } else {
+    ctx.beginPath();
+    ctx.arc(0, 0, p.size / 2, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.restore();
+}
+
+function animateConfetti() {
+  if (!confettiRunning) return;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Spawn new ones
+  if (particles.length < 120 && Math.random() > 0.3) {
+    for (let i = 0; i < 3; i++) particles.push(createParticle());
+  }
+
+  particles = particles.filter(p => {
+    p.x  += p.vx;
+    p.vy += 0.05; // gravity
+    p.y  += p.vy;
+    p.rotation += p.rotSpeed;
+    if (p.y > canvas.height * 0.75) p.opacity -= 0.015;
+    drawParticle(p);
+    return p.opacity > 0 && p.y < canvas.height + 20;
+  });
+
+  animId = requestAnimationFrame(animateConfetti);
+}
+
+function launchConfetti() {
+  canvas.classList.add('active');
+  confettiRunning = true;
+  particles = [];
+  animateConfetti();
+  setTimeout(() => {
+    confettiRunning = false;
+  }, 4000);
+}
+
+function stopConfetti() {
+  confettiRunning = false;
+  canvas.classList.remove('active');
+  if (animId) cancelAnimationFrame(animId);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles = [];
+}
+
+/* ============================================================
+   KEYBOARD NAVIGATION — Close overlay on Escape
+============================================================ */
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    const overlay = document.getElementById('successOverlay');
+    if (overlay.classList.contains('active')) {
+      document.getElementById('btnDismiss').click();
+    }
+  }
+});
+
+/* ============================================================
+   FIELD FOCUS — animate label
+============================================================ */
+document.querySelectorAll('input').forEach(input => {
+  input.addEventListener('focus', () => {
+    const wrap = input.closest('.input-wrap');
+    if (wrap) {
+      wrap.style.transition = 'transform 0.15s var(--ease-spring)';
+    }
+  });
+});
+</script>
+</body>
+</html>
