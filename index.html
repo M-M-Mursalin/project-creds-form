@@ -1445,7 +1445,6 @@ form.addEventListener('submit', async (e) => {
   const allValid = fields.map(id => validateField(id)).every(Boolean);
 
   if (!allValid) {
-    // Shake the card
     const card = document.querySelector('.card');
     card.style.animation = 'none';
     card.style.transform = 'translateX(-6px)';
@@ -1455,7 +1454,6 @@ form.addEventListener('submit', async (e) => {
     return;
   }
 
-  // Disable & show spinner
   btnSubmit.disabled = true;
   btnSpinner.classList.add('active');
   startProgress();
@@ -1472,21 +1470,22 @@ form.addEventListener('submit', async (e) => {
   let success = false;
 
   try {
+    // If you are still testing locally with the default text placeholder:
     if (APPS_SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE') {
-      // Demo mode — simulate a network call
       await new Promise(r => setTimeout(r, 1800));
       success = true;
     } else {
+      // FIX: Changed Content-Type to text/plain to prevent CORS preflight block
       const res = await fetch(APPS_SCRIPT_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'text/plain' },
         body: JSON.stringify(payload),
       });
       const data = await res.json();
       success = data.status === 'success';
     }
   } catch (err) {
-    console.error('Submission error:', err);
+    console.error('Submission error details:', err);
     success = false;
   }
 
@@ -1497,25 +1496,23 @@ form.addEventListener('submit', async (e) => {
   if (success) {
     showSuccessState(payload.projectName);
   } else {
-    // Show inline error
     showMsg('projectName', '', '');
     const errMsg = document.createElement('div');
     errMsg.style.cssText = `
       padding: 12px 16px;
-      background: var(--error-bg);
-      border: 1px solid var(--border-error);
-      border-radius: var(--radius-md);
-      color: var(--error);
+      background: var(--error-bg, #fee2e2);
+      border: 1px solid var(--border-error, #fca5a5);
+      border-radius: 4px;
+      color: var(--error, #dc2626);
       font-size: 13px;
       text-align: center;
-      margin-top: 4px;
+      margin-top: 12px;
     `;
     errMsg.textContent = '⚠ Submission failed. Please check your connection and try again.';
     form.appendChild(errMsg);
     setTimeout(() => errMsg.remove(), 5000);
   }
 });
-
 /* ============================================================
    SUCCESS STATE
 ============================================================ */
